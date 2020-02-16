@@ -69,8 +69,6 @@ public:
         int cont=0;
         bool found=false;
         circularNode *temp=header;
-        gotoxy(4,1);
-        cout<<"x(Reporte archivos)";
         if(size!=0){
             while(cont<size){
                 if(temp->data==param){
@@ -115,10 +113,10 @@ public:
         }
         if (cont != 0) {
             int i=0;
-            for (int i = 0; i < cont - 1; i++) {
+            for (i = 0; i < cont-1; i++) {
                 info += "n_" + to_string(i) + "->";
             }
-            info += "n_" + to_string(i) + "-> n_" + to_string(i);
+            info += "n_" + to_string(i) + "-> n_0";
         }
     }
         return info;
@@ -769,6 +767,7 @@ int main() {
     Log *info;
     ofstream file;
 
+
     bool active = true;
     bool flag=false;
     bool exit=false;
@@ -905,7 +904,23 @@ int main() {
                                }
                                //Reports
                                else if(acci==19){
+                                   if(name!=""){
+                                       ofstream file(path+name,ofstream::trunc);
+                                       file<<list->copy(list);
+                                       file.close();
+                                   }
+                                   else{
+                                     currentNewFile=6;
+                                     x_=9;
+                                     gotoxy(8,2);
+                                     cout<<">";
+                                     exit= true;
+                                   }
+
+                               }
+                               else if(acci==4){
                                    currentNewFile=5;
+
                                }
                                    //Delete
                                else if(acci==8){
@@ -941,6 +956,7 @@ int main() {
                                    //Exit
                                else if (input == 24) {
                                    exit=true;
+                                   name="";
                                    erase();
                                    current = 0;
                                    x = 3;
@@ -1230,7 +1246,32 @@ int main() {
                                    break;
                            }
                            break;
+                       case 6:
+                           input=getch();
+                           acci=input;
+                           if(input=='\r'){
+                               ofstream file(path+name,ofstream::trunc);
+                               file<<list->copy(list);
+                               file.close();
+                               currentNewFile=0;
+                               newFile();
+                               circularNode *node=new circularNode(name);
+                               circular->prepend(node);
+                           }
+                            else if(acci==24){
+                            newFile();
+                            currentNewFile=0;
+                            }
+                            else if(input==' '){
 
+                            }
+                            else{
+                                name+=input;
+                                gotoxy(x_,2);
+                                cout<<input;
+                                x_++;
+                            }
+                           break;
                    }
 
 
@@ -1298,6 +1339,7 @@ int main() {
                            circular->prepend(node);
                        }
                        sTotal="";
+
 
                    }
                    in.close();
